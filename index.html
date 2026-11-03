@@ -1,0 +1,250 @@
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#f5f7fb" />
+    <title>Stockroom — Inventory & Gudang</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="styles.css" />
+    <link rel="stylesheet" href="auth.css" />
+  </head>
+  <body>
+    <section class="auth-screen" id="auth-screen" aria-labelledby="auth-title" hidden>
+      <div class="auth-card">
+        <a class="brand auth-brand" href="#" aria-label="Stockroom"><span class="brand-mark">S</span><span class="brand-name">stockroom<span>.</span></span></a>
+        <p class="eyebrow" id="auth-eyebrow">AKUN STOCKROOM</p>
+        <h1 id="auth-title">Masuk ke Stockroom</h1>
+        <p class="auth-description" id="auth-description">Masuk untuk melanjutkan mengelola gudang Anda.</p>
+        <div class="auth-message" id="auth-message" role="alert" hidden></div>
+        <form class="auth-form" id="login-form">
+          <label for="login-email">Email</label>
+          <input class="form-control" id="login-email" type="email" autocomplete="username" required placeholder="nama@email.com" />
+          <label for="login-password">Kata sandi</label>
+          <input class="form-control" id="login-password" type="password" autocomplete="current-password" required placeholder="Masukkan kata sandi" />
+          <button class="button button-primary auth-submit" type="submit">Masuk</button>
+        </form>
+        <form class="auth-form" id="register-form" hidden>
+          <label for="register-name">Nama</label>
+          <input class="form-control" id="register-name" autocomplete="name" required maxlength="80" placeholder="Nama Anda" />
+          <label for="register-email">Email</label>
+          <input class="form-control" id="register-email" type="email" autocomplete="email" required placeholder="nama@email.com" />
+          <label for="register-password">Kata sandi</label>
+          <input class="form-control" id="register-password" type="password" autocomplete="new-password" minlength="8" required placeholder="Minimal 8 karakter" />
+          <label for="register-password-confirm">Ulangi kata sandi</label>
+          <input class="form-control" id="register-password-confirm" type="password" autocomplete="new-password" minlength="8" required placeholder="Ulangi kata sandi" />
+          <button class="button button-primary auth-submit" type="submit">Buat akun</button>
+        </form>
+        <button class="auth-switch" id="auth-switch" type="button">Belum punya akun? Buat akun</button>
+      </div>
+    </section>
+    <div class="app-shell" id="app-shell" hidden>
+      <aside class="sidebar" id="sidebar">
+        <a class="brand" href="#" aria-label="Stockroom beranda">
+          <span class="brand-mark">S</span>
+          <span class="brand-name">stockroom<span>.</span></span>
+        </a>
+        <div class="workspace-label">WORKSPACE</div>
+        <div class="workspace-picker">
+          <button type="button" class="workspace-card" id="workspace-toggle" aria-expanded="false" aria-controls="workspace-menu">
+            <span class="workspace-icon">⌂</span>
+            <span class="workspace-copy"><strong id="workspace-name">Gudang Utama</strong><small id="workspace-location">Surabaya, Jawa Timur</small></span>
+            <span class="chevron">⌄</span>
+          </button>
+          <div class="workspace-menu" id="workspace-menu" role="menu" aria-label="Pilih gudang" hidden></div>
+        </div>
+        <div class="nav-label">MENU UTAMA</div>
+        <nav class="main-nav" aria-label="Menu utama">
+          <button class="nav-link active" data-view="overview"><span class="nav-icon">▦</span> Ringkasan</button>
+          <button class="nav-link" data-view="warehouse"><span class="nav-icon">↙</span> Gudang <span class="nav-count" id="incoming-count">3</span></button>
+          <button class="nav-link" data-view="inventory"><span class="nav-icon">▤</span> Inventory</button>
+          <button class="nav-link" data-view="clients"><span class="nav-icon">♙</span> Client</button>
+          <button class="nav-link" data-view="invoices"><span class="nav-icon">▧</span> Invoice</button>
+          <button class="nav-link" data-view="stocktake"><span class="nav-icon">☷</span> Stock Opname</button>
+        </nav>
+        <div class="sidebar-bottom">
+          <button type="button" class="profile profile-trigger" data-action="open-profile" aria-label="Buka profil akun">
+            <div class="avatar" data-user-initials>U</div>
+            <div class="profile-copy"><strong data-user-name>Pengguna</strong><small>Administrator</small></div>
+            <span class="more-button" aria-hidden="true">···</span>
+          </button>
+        </div>
+      </aside>
+
+      <main class="main-area">
+        <header class="topbar">
+          <button class="mobile-menu" id="mobile-menu" aria-label="Buka menu">☰</button>
+          <div class="breadcrumb" aria-label="Navigasi breadcrumb"><button type="button" class="breadcrumb-link" data-action="open-workspace-picker">Workspace</button><i>/</i><button type="button" class="breadcrumb-current" id="breadcrumb-current" data-view-link="overview">Ringkasan</button></div>
+          <div class="top-actions">
+            <div class="date-label" aria-label="Tanggal dan waktu WIB"><span>◷</span><span id="today-label">Memuat waktu WIB...</span></div>
+            <div class="notification-area">
+              <button type="button" class="icon-button notification-button" id="notification-toggle" aria-label="Notifikasi" aria-expanded="false" aria-controls="notification-popover">♧<span class="notification-indicator" aria-hidden="true"></span></button>
+              <section class="notification-popover" id="notification-popover" aria-label="Notifikasi" hidden>
+                <div class="notification-heading"><strong>Notifikasi</strong><button type="button" class="text-button" id="notification-clear">Tandai dibaca</button></div>
+                <div id="notification-list"></div>
+              </section>
+            </div>
+            <button type="button" class="top-avatar profile-avatar-button" data-user-initials data-action="open-profile" aria-label="Buka profil akun">U</button>
+          </div>
+        </header>
+
+        <div class="page-content">
+          <section class="view active" id="view-overview">
+            <div class="page-heading heading-row">
+              <div><p class="eyebrow">OVERVIEW</p><h1>Selamat pagi, <span data-user-name>Pengguna</span> <span class="wave">.....</span></h1><p class="subtitle">Berikut ringkasan aktivitas gudang Anda hari ini.</p></div>
+              <button class="button button-primary" data-action="open-incoming"><span>＋</span> Barang masuk</button>
+            </div>
+            <div class="stats-grid">
+              <article class="stat-card"><div class="stat-top"><span>Total client</span><span class="stat-icon violet">♙</span></div><div class="stat-value" id="stat-clients">0</div><div class="stat-foot"><span class="trend neutral">Client terdaftar</span></div></article>
+              <article class="stat-card"><div class="stat-top"><span>Total barang</span><span class="stat-icon blue">▤</span></div><div class="stat-value" id="stat-items">0</div><div class="stat-foot"><span class="trend neutral">Unit inventory</span></div></article>
+              <article class="stat-card"><div class="stat-top"><span>Barang tersedia</span><span class="stat-icon green">●</span></div><div class="stat-value" id="stat-available">0</div><div class="stat-foot"><span class="trend positive">Siap digunakan</span></div></article>
+              <article class="stat-card"><div class="stat-top"><span>Barang digunakan</span><span class="stat-icon orange">↗</span></div><div class="stat-value" id="stat-used">0</div><div class="stat-foot"><span class="trend neutral">Sedang dipinjam</span></div></article>
+            </div>
+            <div class="overview-grid">
+              <section class="panel activity-panel">
+                <div class="panel-heading"><div><h2>Aktivitas terbaru</h2><p>Pergerakan barang di gudang Anda</p></div><button class="text-button" data-view-link="inventory">Lihat semua <span>→</span></button></div>
+                <div class="table-wrap">
+                  <table><thead><tr><th>BARANG</th><th>KATEGORI</th><th>AKTIVITAS</th><th>TANGGAL</th><th>STATUS</th></tr></thead><tbody id="activity-table"></tbody></table>
+                </div>
+              </section>
+              <section class="panel quick-panel">
+                <div class="panel-heading"><div><h2>Akses cepat</h2><p>Kelola gudang lebih mudah</p></div></div>
+                <button class="quick-link" data-action="open-incoming"><span class="quick-icon quick-blue">↙</span><span><strong>Catat barang masuk</strong><small>Tambah barang ke gudang</small></span><b>→</b></button>
+                <button class="quick-link" data-view-link="inventory"><span class="quick-icon quick-violet">▤</span><span><strong>Lihat inventory</strong><small>Cari dan kelola barang</small></span><b>→</b></button>
+                <button class="quick-link" data-view-link="stocktake"><span class="quick-icon quick-green">☷</span><span><strong>Mulai stock opname</strong><small>Cocokkan stok barang</small></span><b>→</b></button>
+                <div class="stocktake-tip"><div class="tip-mark">✦</div><div><strong>Tips hari ini</strong><p>Lakukan stock opname secara berkala untuk menjaga akurasi data persediaan.</p></div></div>
+              </section>
+            </div>
+            <section class="panel chart-panel">
+              <div class="panel-heading"><div><h2>Grafik inventory</h2><p>Jumlah unit berdasarkan status barang</p></div><span class="chart-total" id="chart-total">0 unit</span></div>
+              <div class="inventory-chart" id="inventory-chart" role="img" aria-label="Grafik jumlah barang berdasarkan status"></div>
+            </section>
+            <section class="panel category-panel">
+              <div class="panel-heading"><div><h2>Kategori barang</h2><p>Distribusi barang berdasarkan kategori</p></div><button class="text-button" data-view-link="inventory">Semua kategori <span>→</span></button></div>
+              <div class="category-grid" id="category-grid"></div>
+            </section>
+          </section>
+
+          <section class="view" id="view-warehouse">
+            <div class="page-heading heading-row"><div><p class="eyebrow">GUDANG</p><h1>Barang masuk</h1><p class="subtitle">Catat barang baru dan kelola informasi penerimaan.</p></div><button class="button button-primary" data-action="open-incoming"><span>＋</span> Tambah barang</button></div>
+            <div class="warehouse-summary">
+              <div class="summary-card"><span class="summary-icon green">↙</span><div><small>Barang masuk bulan ini</small><strong id="warehouse-total">36 barang</strong></div></div>
+              <div class="summary-card"><span class="summary-icon orange">◷</span><div><small>Menunggu pemeriksaan</small><strong id="warehouse-pending">3 barang</strong></div></div>
+              <div class="summary-card"><span class="summary-icon blue">▤</span><div><small>Total kategori</small><strong id="warehouse-category-total">0 kategori</strong></div></div>
+            </div>
+            <section class="panel">
+              <div class="panel-heading inventory-heading"><div><h2>Daftar penerimaan</h2><p>Barang yang baru diterima di gudang</p></div><button class="button button-outline" data-action="open-incoming">＋ Catat barang masuk</button></div>
+              <div class="toolbar"><div class="search-box"><span>⌕</span><input id="warehouse-search" placeholder="Cari nama barang atau serial number..." /></div><select id="warehouse-status" class="filter-select"><option value="">Semua status</option><option>Perlu diperiksa</option><option>Tersedia</option><option>Dalam perbaikan</option><option>Dipinjam</option></select></div>
+              <div class="table-wrap"><table><thead><tr><th>BARANG</th><th>SERIAL NUMBER</th><th>KATEGORI</th><th>SUMBER BARANG</th><th>TANGGAL MASUK</th><th>STATUS</th></tr></thead><tbody id="warehouse-table"></tbody></table></div>
+              <div class="table-footer"><span id="warehouse-result-count"></span><span>Data tersimpan di sesi ini</span></div>
+            </section>
+          </section>
+
+          <section class="view" id="view-inventory">
+            <div class="page-heading heading-row"><div><p class="eyebrow">INVENTORY</p><h1>Daftar barang</h1><p class="subtitle">Pantau dan kelola seluruh barang di gudang Anda.</p></div><button class="button button-primary" data-action="open-incoming"><span>＋</span> Tambah barang</button></div>
+            <div class="inventory-stats">
+              <div><span class="tiny-icon blue">▤</span><span><small>Total barang</small><strong id="inventory-total">1.284</strong></span></div>
+              <div><span class="tiny-icon green">●</span><span><small>Tersedia</small><strong id="inventory-available">1.216</strong></span></div>
+              <div><span class="tiny-icon orange">◷</span><span><small>Perlu diperiksa</small><strong id="inventory-review">3</strong></span></div>
+              <div><span class="tiny-icon red">↗</span><span><small>Dalam perbaikan</small><strong id="inventory-repair">5</strong></span></div>
+            </div>
+            <section class="panel">
+              <div class="panel-heading inventory-heading"><div><h2>Semua barang <span class="heading-count" id="inventory-count"></span></h2><p>Informasi lengkap barang yang tersimpan di gudang</p></div><button class="button button-outline" id="export-button"><span>↓</span> Export</button></div>
+              <div class="toolbar"><div class="search-box"><span>⌕</span><input id="inventory-search" placeholder="Cari nama barang, serial number..." /></div><select id="category-filter" class="filter-select"><option value="">Semua kategori</option></select><select id="status-filter" class="filter-select"><option value="">Semua status</option><option>Tersedia</option><option>Perlu diperiksa</option><option>Dalam perbaikan</option><option>Dipinjam</option></select></div>
+              <div class="table-wrap"><table><thead><tr><th>BARANG</th><th>SERIAL NUMBER</th><th>KATEGORI</th><th>SUMBER BARANG</th><th>TANGGAL MASUK</th><th>STATUS</th><th></th></tr></thead><tbody id="inventory-table"></tbody></table></div>
+              <div class="table-footer"><span id="inventory-result-count"></span><span>Data tersimpan di sesi ini</span></div>
+            </section>
+          </section>
+
+          <section class="view" id="view-clients">
+            <div class="page-heading heading-row"><div><p class="eyebrow">CLIENT</p><h1>Daftar client</h1><p class="subtitle">Kelola client dan barang yang sedang mereka gunakan.</p></div><button class="button button-primary" data-action="open-client"><span>＋</span> Tambah client</button></div>
+            <section class="panel">
+              <div class="panel-heading inventory-heading"><div><h2>Semua client <span class="heading-count" id="client-count">0</span></h2><p>Informasi dan barang yang digunakan setiap client</p></div><div class="search-box"><span>⌕</span><input id="client-search" placeholder="Cari nama atau email client..." /></div></div>
+              <div class="table-wrap"><table><thead><tr><th>CLIENT</th><th>EMAIL</th><th>TELEPON</th><th>BARANG DIGUNAKAN</th><th>INVOICE</th><th></th></tr></thead><tbody id="client-table"></tbody></table></div>
+              <div class="table-footer"><span id="client-result-count"></span><span>Data tersedia selama sesi ini</span></div>
+            </section>
+          </section>
+
+          <section class="view" id="view-invoices">
+            <div class="page-heading heading-row"><div><p class="eyebrow">INVOICE</p><h1>Daftar invoice</h1><p class="subtitle">Buat invoice dan hubungkan dengan client serta barang inventory.</p></div><button class="button button-primary" data-action="open-invoice"><span>＋</span> Tambah invoice</button></div>
+            <div class="warehouse-summary">
+              <div class="summary-card"><span class="summary-icon violet">▧</span><div><small>Total invoice</small><strong id="invoice-total">0 invoice</strong></div></div>
+              <div class="summary-card"><span class="summary-icon green">✓</span><div><small>Lunas</small><strong id="invoice-paid">0 invoice</strong></div></div>
+              <div class="summary-card"><span class="summary-icon orange">◷</span><div><small>Belum dibayar</small><strong id="invoice-unpaid">0 invoice</strong></div></div>
+            </div>
+            <section class="panel">
+              <div class="panel-heading inventory-heading"><div><h2>Semua invoice</h2><p>Invoice dan barang yang ditagihkan</p></div><select id="invoice-status-filter" class="filter-select"><option value="">Semua status</option><option>Belum dibayar</option><option>Lunas</option></select></div>
+              <div class="table-wrap"><table><thead><tr><th>NOMOR INVOICE</th><th>CLIENT</th><th>TANGGAL</th><th>JATUH TEMPO</th><th>JUMLAH</th><th>STATUS</th><th></th></tr></thead><tbody id="invoice-table"></tbody></table></div>
+              <div class="table-footer"><span id="invoice-result-count"></span><span>Data tersedia selama sesi ini</span></div>
+            </section>
+          </section>
+
+          <section class="view" id="view-stocktake">
+            <div class="page-heading heading-row"><div><p class="eyebrow">STOCK OPNAME</p><h1>Pemeriksaan stok</h1><p class="subtitle">Cocokkan stok sistem dengan kondisi fisik barang di gudang.</p></div><span class="status-pill status-green"><span></span> Sesi aktif</span></div>
+            <div class="stocktake-layout">
+              <section class="panel opname-form-panel">
+                <div class="panel-heading"><div><h2>Input stock opname</h2><p>Isi hasil pemeriksaan barang secara langsung</p></div><span class="opname-step">01 / 01</span></div>
+                <form id="stocktake-form">
+                  <label class="field-label" for="opname-item">Pilih barang <b>*</b></label>
+                  <select class="form-control" id="opname-item" required><option value="">Pilih barang yang akan diperiksa</option></select>
+                  <div class="stock-comparison">
+                    <div class="stock-box"><span>STOK SISTEM</span><strong id="system-stock">—</strong><small>Jumlah tercatat</small></div>
+                    <div class="comparison-arrow">→</div>
+                    <div class="stock-box physical-box"><label for="physical-stock">STOK FISIK</label><input id="physical-stock" type="number" min="0" placeholder="0" required /><small>Jumlah aktual</small></div>
+                    <div class="difference-box" id="difference-box"><span>SELISIH</span><strong id="stock-difference">—</strong><small id="difference-label">Pilih barang</small></div>
+                  </div>
+                  <label class="field-label" for="inspection-notes">Catatan pemeriksaan <span>(opsional)</span></label>
+                  <textarea class="form-control textarea" id="inspection-notes" rows="4" placeholder="Tuliskan kondisi barang atau catatan lainnya..."></textarea>
+                  <label class="field-label">Dokumentasi foto <span>(opsional)</span></label>
+                  <label class="upload-area" for="opname-photo"><span class="upload-icon">↑</span><strong>Unggah foto dokumentasi</strong><small>PNG, JPG hingga 10 MB</small><input type="file" id="opname-photo" accept="image/*" hidden /><span class="photo-preview" id="opname-preview"></span></label>
+                  <div class="form-actions"><button type="reset" class="button button-outline" id="reset-opname">Reset</button><button type="submit" class="button button-primary"><span>✓</span> Simpan pemeriksaan</button></div>
+                </form>
+              </section>
+              <aside class="opname-side">
+                <section class="panel opname-info"><div class="panel-heading"><div><h2>Ringkasan sesi</h2><p>Aktivitas pemeriksaan hari ini</p></div></div><div class="session-progress"><div class="progress-label"><span>Barang diperiksa</span><strong id="checked-progress">0 / 12</strong></div><div class="progress-track"><span id="progress-bar"></span></div></div><div class="session-row"><span><i class="legend-dot green-dot"></i>Sesuai</span><strong id="match-count">0 barang</strong></div><div class="session-row"><span><i class="legend-dot orange-dot"></i>Ada selisih</span><strong id="mismatch-count">0 barang</strong></div><div class="session-row"><span><i class="legend-dot gray-dot"></i>Belum diperiksa</span><strong id="unchecked-count">12 barang</strong></div></section>
+                <section class="panel recent-opname"><div class="panel-heading"><div><h2>Pemeriksaan terakhir</h2><p>Riwayat stock opname Anda</p></div></div><div id="opname-history" class="opname-history"><div class="empty-state"><span>☷</span><strong>Belum ada pemeriksaan</strong><small>Hasil pemeriksaan akan muncul di sini.</small></div></div></section>
+                <div class="opname-reminder"><span>✦</span><div><strong>Ingat untuk dokumentasi</strong><p>Foto membantu melacak kondisi barang dan memastikan hasil pemeriksaan lebih akurat.</p></div></div>
+              </aside>
+            </div>
+          </section>
+        </div>
+      </main>
+    </div>
+
+    <div class="modal-backdrop" id="incoming-modal" aria-hidden="true">
+      <section class="modal" role="dialog" aria-modal="true" aria-labelledby="incoming-title">
+        <div class="modal-heading"><div><p class="eyebrow">PENERIMAAN BARANG</p><h2 id="incoming-title">Tambah barang masuk</h2><p>Lengkapi informasi barang yang diterima.</p></div><button class="modal-close" data-action="close-modal" aria-label="Tutup">×</button></div>
+        <form id="incoming-form">
+          <div class="form-grid">
+            <div class="field full"><label class="field-label" for="item-name">Nama barang <b>*</b></label><input class="form-control" id="item-name" required placeholder="Contoh: Laptop Lenovo ThinkPad" /></div>
+            <div class="field"><label class="field-label" for="item-category">Kategori <b>*</b></label><select class="form-control" id="item-category" required></select></div>
+            <div class="field"><label class="field-label" for="item-serial">Serial number <b>*</b></label><input class="form-control" id="item-serial" required placeholder="Contoh: SN-2025-001" /></div>
+            <div class="field"><label class="field-label" for="item-source">Sumber barang <b>*</b></label><input class="form-control" id="item-source" required placeholder="Contoh: Pembelian / Vendor" /></div>
+            <div class="field"><label class="field-label" for="item-status">Status barang</label><select class="form-control" id="item-status"><option>Tersedia</option><option>Perlu diperiksa</option><option>Dalam perbaikan</option><option>Dipinjam</option></select></div>
+            <div class="field full"><label class="field-label">Upload foto <span>(opsional)</span></label><label class="upload-inline" for="incoming-photo"><span>＋</span><span id="incoming-photo-label">Pilih foto barang</span><span id="incoming-photo-preview"></span><input type="file" id="incoming-photo" accept="image/*" hidden /></label></div>
+          </div>
+          <div class="modal-actions"><button type="button" class="button button-outline" data-action="close-modal">Batal</button><button type="submit" class="button button-primary">Simpan barang <span>→</span></button></div>
+        </form>
+      </section>
+    </div>
+    <div class="modal-backdrop" id="detail-modal" aria-hidden="true"><section class="modal detail-modal" role="dialog" aria-modal="true" aria-labelledby="detail-title"><div class="modal-heading"><div><p class="eyebrow">DETAIL BARANG</p><h2 id="detail-title">Informasi barang</h2><p>Informasi lengkap dan riwayat barang.</p></div><button class="modal-close" data-action="close-modal" aria-label="Tutup">×</button></div><div id="detail-content"></div></section></div>
+    <div class="modal-backdrop" id="client-modal" aria-hidden="true"><section class="modal" role="dialog" aria-modal="true" aria-labelledby="client-modal-title"><div class="modal-heading"><div><p class="eyebrow">DATA CLIENT</p><h2 id="client-modal-title">Tambah client</h2><p>Isi informasi client dan barang yang digunakan.</p></div><button class="modal-close" data-action="close-modal" aria-label="Tutup">×</button></div><form id="client-form"><input id="client-id" type="hidden"><div class="form-grid"><div class="field full"><label class="field-label" for="client-name">Nama client <b>*</b></label><input class="form-control" id="client-name" required placeholder="Nama perusahaan atau client"></div><div class="field"><label class="field-label" for="client-email">Email <b>*</b></label><input class="form-control" id="client-email" type="email" required placeholder="nama@perusahaan.com"></div><div class="field"><label class="field-label" for="client-phone">Telepon</label><input class="form-control" id="client-phone" type="tel" placeholder="+62 ..."></div><div class="field full"><label class="field-label" for="client-address">Alamat</label><textarea class="form-control textarea" id="client-address" rows="2" placeholder="Alamat client"></textarea></div><div class="field full"><span class="field-label">Barang yang digunakan</span><div id="client-item-options" class="check-list"></div></div></div><div class="modal-actions"><button type="button" class="button button-outline" data-action="close-modal">Batal</button><button type="submit" class="button button-primary">Simpan client <span>→</span></button></div></form></section></div>
+    <div class="modal-backdrop" id="client-detail-modal" aria-hidden="true"><section class="modal detail-modal" role="dialog" aria-modal="true" aria-labelledby="client-detail-title"><div class="modal-heading"><div><p class="eyebrow">DETAIL CLIENT</p><h2 id="client-detail-title">Informasi client</h2><p>Barang yang digunakan dan riwayat invoice.</p></div><button class="modal-close" data-action="close-modal" aria-label="Tutup">×</button></div><div id="client-detail-content"></div></section></div>
+    <div class="modal-backdrop" id="invoice-modal" aria-hidden="true"><section class="modal" role="dialog" aria-modal="true" aria-labelledby="invoice-modal-title"><div class="modal-heading"><div><p class="eyebrow">INVOICE BARU</p><h2 id="invoice-modal-title">Tambah invoice</h2><p>Hubungkan invoice dengan client dan barang.</p></div><button class="modal-close" data-action="close-modal" aria-label="Tutup">×</button></div><form id="invoice-form"><div class="form-grid"><div class="field full"><label class="field-label" for="invoice-client">Client <b>*</b></label><select class="form-control" id="invoice-client" required></select></div><div class="field"><label class="field-label" for="invoice-date">Tanggal invoice <b>*</b></label><input class="form-control" id="invoice-date" type="date" required></div><div class="field"><label class="field-label" for="invoice-due-date">Jatuh tempo <b>*</b></label><input class="form-control" id="invoice-due-date" type="date" required></div><div class="field full"><span class="field-label">Barang pada invoice <b>*</b></span><div id="invoice-item-options" class="invoice-item-options"></div></div><div class="field full"><label class="field-label" for="invoice-notes">Catatan</label><textarea class="form-control textarea" id="invoice-notes" rows="2" placeholder="Catatan tambahan"></textarea></div></div><div class="invoice-form-total"><span>Total invoice</span><strong id="invoice-form-total">Rp0</strong></div><div class="modal-actions"><button type="button" class="button button-outline" data-action="close-modal">Batal</button><button type="submit" class="button button-primary">Simpan invoice <span>→</span></button></div></form></section></div>
+    <div class="modal-backdrop" id="invoice-detail-modal" aria-hidden="true"><section class="modal detail-modal" role="dialog" aria-modal="true" aria-labelledby="invoice-detail-title"><div class="modal-heading"><div><p class="eyebrow">DETAIL INVOICE</p><h2 id="invoice-detail-title">Informasi invoice</h2><p>Rincian client dan barang yang ditagihkan.</p></div><button class="modal-close" data-action="close-modal" aria-label="Tutup">×</button></div><div id="invoice-detail-content"></div></section></div>
+    <div class="modal-backdrop" id="profile-modal" aria-hidden="true"><section class="modal profile-modal" role="dialog" aria-modal="true" aria-labelledby="profile-title"><div class="modal-heading"><div><p class="eyebrow">AKUN</p><h2 id="profile-title">Profil saya</h2><p>Informasi akun administrator.</p></div><button class="modal-close" data-action="close-modal" aria-label="Tutup">×</button></div><div class="profile-detail"><div class="profile-large-avatar" data-user-initials>U</div><div><h3 data-user-name>Pengguna</h3><p>Administrator</p></div></div><div class="detail-grid"><div class="detail-field"><small>Nama</small><strong data-user-name>Pengguna</strong></div><div class="detail-field"><small>Email</small><strong id="profile-user-email">—</strong></div><div class="detail-field"><small>Peran</small><strong>Administrator</strong></div><div class="detail-field full-detail-field"><small>Workspace aktif</small><strong id="profile-workspace-name">Gudang Utama — Surabaya, Jawa Timur</strong></div></div><section class="profile-help"><div class="help-icon">?</div><div><strong>Butuh bantuan?</strong><p>Hubungi tim support kami untuk bantuan penggunaan Stockroom.</p></div></section><div class="modal-actions"><button type="button" class="button button-outline" id="logout-button">Keluar akun</button></div></section></div>
+    <div class="toast" id="toast" role="status"></div>
+    <script src="auth.js"></script>
+    <script src="dashboard.js"></script>
+    <script src="clients.js"></script>
+    <script src="invoices.js"></script>
+    <script src="inventory.js"></script>
+    <script src="warehouse.js"></script>
+    <script src="stocktake.js"></script>
+    <script src="workspace.js"></script>
+    <script src="profile.js"></script>
+    <script src="app.js"></script>
+  </body>
+</html>
